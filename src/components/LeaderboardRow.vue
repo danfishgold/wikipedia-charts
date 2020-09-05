@@ -12,35 +12,29 @@
   </tr>
 </template>
 
-<script>
-export default {
-  name: 'LeaderboardRow',
-  props: ['article'],
-  computed: {
-    normalizedTitle() {
-      return this.article.title === 'Special:Search'
-        ? 'Search'
-        : this.article.title.replace(/_/g, ' ')
-    },
-    fires() {
-      if (!this.article.rankOnPreviousDay) {
-        return '🔥🔥'
-      } else if (this.article.rankOnPreviousDay - this.article.rank > 100) {
-        return '🔥'
-      } else {
-        return ''
-      }
-    },
-  },
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Article } from '../wikipedia'
+
+@Component
+export default class LeaderboardRow extends Vue {
+  @Prop({ required: true })
+  public article!: Article
+
+  get normalizedTitle() {
+    return this.article.title === 'Special:Search'
+      ? 'Search'
+      : this.article.title.replace(/_/g, ' ') ?? ''
+  }
+
+  get fires() {
+    if (!this.article.rankOnPreviousDay) {
+      return '🔥🔥'
+    } else if (this.article.rankOnPreviousDay - this.article.rank > 100) {
+      return '🔥'
+    } else {
+      return ''
+    }
+  }
 }
 </script>
-
-<style scoped>
-td:nth-child(1) {
-  text-align: right;
-}
-
-td:nth-child(3) {
-  text-align: right;
-}
-</style>

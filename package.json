@@ -1,15 +1,20 @@
 {
   "scripts": {
-    "start": "parcel watch index.html"
+    "watch": "parcel index.html",
+    "build": "parcel build index.html"
   },
   "dependencies": {
     "date-fns": "^2.16.1",
     "parcel-bundler": "^1.12.4",
     "vue": "^2.6.12",
-    "vue-hot-reload-api": "^2.3.4"
+    "vue-class-component": "^7.2.5",
+    "vue-hot-reload-api": "^2.3.4",
+    "vue-property-decorator": "^9.0.0"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.2.0",
+    "sass": "^1.26.10",
+    "typescript": "^4.0.2",
     "vue-template-compiler": "^2.6.12"
   }
 }

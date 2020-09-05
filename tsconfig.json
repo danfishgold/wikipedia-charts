@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    // this aligns with Vue's browser support
+    "target": "es5",
+    "lib": ["ES2015", "DOM"],
+    // this enables stricter inference for data properties on `this`
+    "strict": true
+  }
+}

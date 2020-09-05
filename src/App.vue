@@ -61,9 +61,14 @@ export default class App extends Vue {
       status: 'loading',
     }
     try {
-      this.articles = {
-        data: await wikipedia.getResultsForDate(newDate, this.cache),
-        status: 'okay',
+      const data = await wikipedia.getResultsForDate(newDate, this.cache)
+      // to avoid race conditions where the date is changed before the request
+      // for the previous date is resolved
+      if (this.date === newDate) {
+        this.articles = {
+          data,
+          status: 'okay',
+        }
       }
     } catch (e) {
       if (firstTime) {

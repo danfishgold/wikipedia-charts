@@ -1,20 +1,15 @@
 {
   "scripts": {
-    "development": "webpack-dev-server",
-    "production": "ws --directory ./dist",
-    "start": "npm run production",
-    "build": "webpack"
+    "start": "parcel watch index.html"
   },
   "dependencies": {
-    "vue": "^2.6.11",
-    "date-fns": "^2.16.1"
+    "date-fns": "^2.16.1",
+    "parcel-bundler": "^1.12.4",
+    "vue": "^2.6.12",
+    "vue-hot-reload-api": "^2.3.4"
   },
   "devDependencies": {
-    "css-loader": "^3.4.0",
-    "vue-loader": "^15.8.3",
-    "vue-template-compiler": "^2.6.11",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1",
-    "webpack": "^4.41.4"
+    "@vue/component-compiler-utils": "^3.2.0",
+    "vue-template-compiler": "^2.6.12"
   }
 }

@@ -74,11 +74,3 @@ export default class DateSelector extends Vue {
   }
 }
 </script>
-
-<style scoped>
-.date-selector {
-  width: auto;
-  margin: 1rem auto;
-  font-variant-numeric: tabular-nums;
-}
-</style>

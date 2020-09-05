@@ -1,11 +1,85 @@
-/* CSS files add styling rules to your content */
+html {
+  font-family: helvetica, arial, sans-serif;
+  height: 100%;
+}
 
 body {
   font-family: helvetica, arial, sans-serif;
-  margin: 2em;
+  padding: 1rem 1rem;
+  margin: 0;
+  height: calc(100% - 2rem);
+}
+
+#app {
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
   font-style: italic;
   color: #373fff;
+}
+
+p {
+  margin: 0.75rem 0;
+}
+
+a {
+  color: black;
+  transition: 0.3s;
+}
+
+a:hover {
+  color: #373fff;
+}
+
+#spacer {
+  flex-grow: 2;
+}
+
+table {
+  border-spacing: 0.5rem;
+
+  thead {
+    font-weight: bold;
+
+    th {
+      &:nth-child(1) {
+        text-align: right;
+      }
+      &:nth-child(2) {
+        text-align: left;
+        width: 100%;
+      }
+      &:nth-child(3) {
+        text-align: right;
+      }
+    }
+  }
+
+  td {
+    &:nth-child(1) {
+      text-align: right;
+    }
+
+    &:nth-child(3) {
+      text-align: right;
+    }
+  }
+}
+
+#leaderboard-container p {
+  margin: 0.5rem;
+}
+
+.date-selector {
+  position: sticky;
+  top: 0;
+  margin: 0 auto;
+  padding: 1rem;
+  background: white;
+  font-variant-numeric: tabular-nums;
 }

@@ -38,6 +38,7 @@
       </p>
       <date-selector
         :date="date"
+        :max-date="maxDate"
         @update="onDateSet($event, false)"
       ></date-selector>
       <leaderboard :articles="articles" :date="date"></leaderboard>
@@ -86,6 +87,7 @@ import { RemoteData } from './remoteData'
 })
 export default class App extends Vue {
   date: Date = DateFns.subDays(new Date(), 1)
+  maxDate: Date = this.date
   cache: Cache | null = null
   articles: RemoteData<Array<Article>> = { status: 'loading' }
   selectedTab = 'article'
@@ -98,6 +100,9 @@ export default class App extends Vue {
 
   async onDateSet(newDate: Date, firstTime: boolean) {
     this.date = newDate
+    if (firstTime) {
+      this.maxDate = newDate
+    }
     this.articles = {
       status: 'loading',
     }

@@ -3,10 +3,10 @@
     <button @click="emitChange('subtract', 'month')">&lt;&lt;</button>
     <button @click="emitChange('subtract', 'day')">&lt;</button>
     <span>{{ formattedDate }}</span>
-    <button @click="emitChange('add', 'day')" :disabled="addDayDisabled">
+    <button @click="emitChange('add', 'day')" :disabled="isFutureDisabled">
       &gt;
     </button>
-    <button @click="emitChange('add', 'month')" :disabled="addMonthDisabled">
+    <button @click="emitChange('add', 'month')" :disabled="isFutureDisabled">
       &gt;&gt;
     </button>
   </div>
@@ -26,18 +26,18 @@ export default class DateSelector extends Vue {
   @Prop({ required: true })
   public date!: Date
 
+  @Prop({ required: true })
+  public maxDate!: Date
+
   get formattedDate() {
     return DateFns.format(this.date, 'MMM do yyyy')
   }
 
-  get addDayDisabled() {
-    const futureDate = DateFns.addDays(this.date, 1)
-    return DateFns.isAfter(futureDate, DateFns.startOfTomorrow())
-  }
-
-  get addMonthDisabled() {
-    const futureDate = DateFns.addMonths(this.date, 1)
-    return DateFns.isAfter(futureDate, DateFns.startOfTomorrow())
+  get isFutureDisabled() {
+    return (
+      DateFns.isAfter(this.date, this.maxDate) ||
+      DateFns.isSameDay(this.date, this.maxDate)
+    )
   }
 
   emitChange(addOrSubtract: Change, unit: Unit) {
@@ -52,13 +52,12 @@ export default class DateSelector extends Vue {
   }
 
   addUnit(unit: Unit) {
-    switch (unit) {
-      case 'day': {
-        return DateFns.addDays(this.date, 1)
-      }
-      case 'month': {
-        return DateFns.addMonths(this.date, 1)
-      }
+    const addFunction = unit === 'day' ? DateFns.addDays : DateFns.addMonths
+    const newDate = addFunction(this.date, 1)
+    if (DateFns.isAfter(newDate, this.maxDate)) {
+      return this.maxDate
+    } else {
+      return newDate
     }
   }
 

@@ -9,7 +9,11 @@ Vue.use(VueRouter)
 
 const routes = [
   { path: '/', component: ArticlePage },
-  { path: '/date/:date(\\d{4}-\\d{1,2}-\\d{1,2})', component: ArticlePage },
+  {
+    path: '/date/:date(\\d{4}-\\d{1,2}-\\d{1,2})',
+    name: 'exact-date',
+    component: ArticlePage,
+  },
   { path: '/talk', component: TalkPage },
   { path: '*', component: ArticlePage },
 ]

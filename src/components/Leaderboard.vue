@@ -1,8 +1,9 @@
 <template>
   <div id="leaderboard-container">
-    <p v-if="articles.status === 'error'">
-      {{ errorMessage }}
-    </p>
+    <error-message
+      v-if="articles.status === 'error'"
+      :date="date"
+    ></error-message>
     <table v-else>
       <thead>
         <tr>
@@ -35,35 +36,16 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 import LeaderboardRow from './LeaderboardRow.vue'
-import * as DateFns from 'date-fns'
-import startOfYesterday from 'date-fns/startOfYesterday'
+import ErrorMessage from './ErrorMessage.vue'
 import { Article } from '../wikipedia'
 import { RemoteData } from '../remoteData'
 
-@Component({ components: { LeaderboardRow } })
+@Component({ components: { LeaderboardRow, ErrorMessage } })
 export default class Leaderboard extends Vue {
   @Prop({ required: true })
   public articles!: RemoteData<Array<Article>>
 
   @Prop({ required: true })
   public date!: Date
-
-  get errorMessage() {
-    if (DateFns.isAfter(this.date, startOfYesterday())) {
-      return `
-          ❌ Wikipedia doesn't give access to the top pages before the end of the day.
-          Past dates should be fine though.
-        `
-    } else if (DateFns.isBefore(this.date, new Date('2015-07-02'))) {
-      return `
-          ❌ Unfortunately Wikipedia doesn't have this information for dates before July 2nd, 2015.
-        `
-    } else {
-      return `
-          ❌ There was a problem. This might be because the page hit Wikipedia's
-          rate limit. Try again later.
-        `
-    }
-  }
 }
 </script>

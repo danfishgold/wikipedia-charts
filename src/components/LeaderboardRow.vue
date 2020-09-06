@@ -1,14 +1,15 @@
 <template>
-  <tr>
-    <td>{{ article.rank }}</td>
+  <tr :class="rowClass">
+    <td>{{ new Intl.NumberFormat().format(article.rank) }}</td>
+    <td>{{ changeIndicator }}</td>
     <td v-if="article.title">
-      <a :href="`https://en.wikipedia.com/wiki/${article.title}`">
-        {{ this.normalizedTitle }}
-      </a>
-      {{ this.fires }}
+      <a :href="`https://en.wikipedia.com/wiki/${article.title}`">{{
+        this.normalizedTitle
+      }}</a>
+      {{ this.indicator }}
     </td>
     <td v-else></td>
-    <td>{{ article.views }}</td>
+    <td>{{ new Intl.NumberFormat().format(article.views) }}</td>
   </tr>
 </template>
 
@@ -27,13 +28,45 @@ export default class LeaderboardRow extends Vue {
       : this.article.title.replace(/_/g, ' ') ?? ''
   }
 
-  get fires() {
+  get changeFromYesterday(): number | null {
     if (!this.article.rankOnPreviousDay) {
-      return '🔥🔥'
-    } else if (this.article.rankOnPreviousDay - this.article.rank > 100) {
-      return '🔥'
+      return null
+    }
+    return this.article.rank - this.article.rankOnPreviousDay
+  }
+
+  get rowClass(): 'same' | 'up' | 'down' | 'big-up' | 'huge-up' {
+    if (this.changeFromYesterday === null) {
+      return 'huge-up'
+    }
+    if (this.changeFromYesterday > 0) {
+      return `down`
+    } else if (this.changeFromYesterday < -100) {
+      return `big-up`
+    } else if (this.changeFromYesterday < 0) {
+      return `up`
     } else {
-      return ''
+      return 'same'
+    }
+  }
+
+  get changeIndicator(): string {
+    switch (this.rowClass) {
+      case 'huge-up': {
+        return '⬆︎⬆︎⬆︎'
+      }
+      case 'big-up': {
+        return `⬆︎${-this.changeFromYesterday ?? 0}`
+      }
+      case 'up': {
+        return `⬆︎${-this.changeFromYesterday ?? 0}`
+      }
+      case 'down': {
+        return `⬇︎${this.changeFromYesterday ?? 0}`
+      }
+      case 'same': {
+        return '–'
+      }
     }
   }
 }

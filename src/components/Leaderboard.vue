@@ -7,6 +7,7 @@
       <thead>
         <tr>
           <th>Rank</th>
+          <th>Change</th>
           <th>Page</th>
           <th>Page Views</th>
         </tr>
@@ -21,6 +22,7 @@
       <tbody v-else>
         <tr v-for="(_, index) in new Array(100)" :key="index">
           <td>{{ index + 1 }}</td>
+          <td></td>
           <td></td>
           <td></td>
         </tr>
@@ -49,9 +51,12 @@ export default class Leaderboard extends Vue {
   get errorMessage() {
     if (DateFns.isAfter(this.date, startOfYesterday())) {
       return `
-          ❌ Wikipedia doesn't give access to the most popular pages
-          today before the end of the day (and sometimes yesterday's too).
+          ❌ Wikipedia doesn't give access to the top pages before the end of the day.
           Past dates should be fine though.
+        `
+    } else if (DateFns.isBefore(this.date, new Date('2015-07-02'))) {
+      return `
+          ❌ Unfortunately Wikipedia doesn't have this information for dates before July 2nd, 2015.
         `
     } else {
       return `

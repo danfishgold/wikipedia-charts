@@ -6,7 +6,6 @@
       <a :href="`https://en.wikipedia.com/wiki/${article.title}`">{{
         this.normalizedTitle
       }}</a>
-      {{ this.indicator }}
     </td>
     <td v-else></td>
     <td>{{ new Intl.NumberFormat().format(article.views) }}</td>

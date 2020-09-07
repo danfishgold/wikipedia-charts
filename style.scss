@@ -172,20 +172,21 @@ nav {
           }
         }
 
-        a,
-        span {
+        a {
           padding: 24px 10px 6px;
           display: block;
-        }
-
-        a {
           background-image: linear-gradient(to top, #e8f2f8 0, #ffffff 100%);
           border-bottom: 1px solid #a7d7f9;
-        }
 
-        span {
-          background: white;
-          border-bottom: 1px solid white;
+          &.router-link-active {
+            background: white;
+            border-bottom: 1px solid white;
+            color: black;
+
+            &:hover {
+              text-decoration: none;
+            }
+          }
         }
       }
     }

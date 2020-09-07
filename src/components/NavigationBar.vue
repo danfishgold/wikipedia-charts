@@ -3,18 +3,21 @@
     <div class="nav__padding"></div>
     <div class="nav__group">
       <div class="nav__group__item">
-        <span v-if="selectedTab === 'article'">Article</span>
-        <a v-else href="/">Article</a>
+        <router-link
+          to="/"
+          exact
+          :class="{ 'router-link-active': $route.fullPath !== '/talk' }"
+          >Article</router-link
+        >
       </div>
       <div class="nav__group__item">
-        <span v-if="selectedTab === 'talk'">Talk</span>
-        <a v-else href="/">Talk</a>
+        <router-link to="/talk">Talk</router-link>
       </div>
     </div>
     <div class="nav__spacer"></div>
     <div class="nav__group">
       <div class="nav__group__item no-mobile">
-        <span>Read</span>
+        <router-link :to="$route.fullPath">Read</router-link>
       </div>
       <div class="nav__group__item">
         <a href="https://github.com/danfishgold/wikipedia-charts">Edit</a>
@@ -28,13 +31,3 @@
     <div class="nav__padding"></div>
   </nav>
 </template>
-
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-
-@Component
-export default class NavigationBar extends Vue {
-  @Prop({ required: true })
-  selectedTab!: 'article' | 'talk'
-}
-</script>

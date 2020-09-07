@@ -17,8 +17,10 @@ export async function getResultsForDate(
   date: Date,
   cache: Cache | null,
 ): Promise<Array<Article>> {
-  const atDate = await getTopPagesForDate(date, cache)
-  const atDayBefore = await getTopPagesForDate(DateFns.subDays(date, 1), cache)
+  const [atDate, atDayBefore] = await Promise.all([
+    getTopPagesForDate(date, cache),
+    getTopPagesForDate(DateFns.subDays(date, 1), cache),
+  ])
   const dayBeforeRanking: { [key: string]: number } = {}
   for (const article of atDayBefore) {
     dayBeforeRanking[article.article] = article.rank
@@ -35,6 +37,40 @@ export async function getResultsForDate(
     })
 
   return top100AtDate
+}
+
+export async function maxDate(cache: Cache | null): Promise<Date> {
+  const tomorrow = DateFns.startOfTomorrow()
+  const today = DateFns.startOfToday()
+  const yesterday = DateFns.startOfYesterday()
+  const twoDaysAgo = DateFns.subDays(yesterday, 1)
+
+  const [tomorrowOkay, todayOkay, yesterdayOkay] = await Promise.all(
+    [tomorrow, today, yesterday].map((date) => loadsFine(date, cache)),
+  )
+
+  if (tomorrowOkay) {
+    return tomorrow
+  } else if (todayOkay) {
+    return today
+  } else if (yesterdayOkay) {
+    return yesterday
+  } else if (await loadsFine(twoDaysAgo, cache)) {
+    return twoDaysAgo
+  } else {
+    // if all four requests failed there's probably a different issue and
+    // there's no point in trying other dates.
+    return today
+  }
+}
+
+async function loadsFine(date, cache: Cache | null): Promise<boolean> {
+  try {
+    await topPagesResponseForDate(date, cache)
+    return true
+  } catch {
+    return false
+  }
 }
 
 async function getTopPagesForDate(

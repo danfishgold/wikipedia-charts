@@ -35,7 +35,9 @@ export default class extends Vue {
   get errorType(): ErrorType {
     if (DateFns.isAfter(this.date, startOfYesterday())) {
       return 'no-information-for-today'
-    } else if (DateFns.isBefore(this.date, new Date('2015-07-02'))) {
+    } else if (
+      DateFns.isBefore(this.date, DateFns.startOfDay(new Date('2015-07-02')))
+    ) {
       return 'no-information-before-2015'
     } else {
       return 'general-problem'

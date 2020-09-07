@@ -37,7 +37,7 @@
     <date-selector
       :date="date"
       :max-date="maxDate"
-      @update="onDateSet($event, 'manually-changed')"
+      @update="updateDate($event, 'manually-changed')"
     ></date-selector>
     <leaderboard :articles="articles" :date="date"></leaderboard>
     <div id="spacer"></div>
@@ -55,7 +55,7 @@ import { Article } from '../wikipedia'
 import * as DateFns from 'date-fns'
 import { RemoteData } from '../remoteData'
 
-type DateChangeReason = 'first-run' | 'manually-changed' | 'url-changed'
+type DateUpdateReason = 'new-url' | 'manually-changed'
 
 @Component({
   components: {
@@ -64,44 +64,64 @@ type DateChangeReason = 'first-run' | 'manually-changed' | 'url-changed'
   },
 })
 export default class ArticlePage extends Vue {
-  date: Date = DateFns.subDays(DateFns.startOfDay(new Date()), 1)
-  maxDate: Date = this.date
+  date: Date | null = null
+  maxDate: Date = DateFns.startOfToday()
   cache: Cache | null = null
   articles: RemoteData<Array<Article>> = { status: 'loading' }
 
   async created() {
+    this.date = this.parseDateFromRoute(this.$route, null)
     this.cache =
       window.caches && (await window.caches.open('wikipedia-analytics'))
-    await this.onDateSet(this.date, 'first-run')
+    this.maxDate = await wikipedia.maxDate(this.cache)
+    const newDate = this.parseDateFromRoute(this.$route, this.maxDate)
+    if (!newDate) {
+      this.rerouteToMaxDate()
+      return
+    }
+    await this.updateDate(newDate, 'new-url')
   }
 
   @Watch('$route')
-  onRouteChange(val: Route, oldVal: Route) {
-    if (val.fullPath === '/') {
-      this.onDateSet(this.maxDate, 'url-changed')
+  async onRouteChange(val: Route) {
+    const newDate = this.parseDateFromRoute(val, this.maxDate)
+    if (!newDate) {
+      this.rerouteToMaxDate()
+      return
+    }
+    await this.updateDate(newDate, 'new-url')
+  }
+
+  parseDateFromRoute(route: Route, maxDate: Date | null): Date | null {
+    if (route.fullPath === '/') {
+      return maxDate
     } else {
-      const newDate = new Date(val.params.date)
-      if (isNaN(newDate.getDate()) || DateFns.isAfter(newDate, this.maxDate)) {
-        const formattedDate = DateFns.format(this.maxDate, 'yyyy-MM-dd')
-        this.$router.replace(`/date/${formattedDate}`)
+      const newDate = DateFns.startOfDay(new Date(route.params.date))
+      if (
+        isNaN(newDate.getDate()) ||
+        (maxDate && DateFns.isAfter(newDate, maxDate))
+      ) {
+        return null
       } else {
-        this.onDateSet(newDate, 'url-changed')
+        return newDate
       }
     }
   }
 
-  async onDateSet(newDate: Date, changeReason: DateChangeReason) {
-    this.date = newDate
+  rerouteToMaxDate() {
+    const formattedDate = DateFns.format(this.maxDate, 'yyyy-MM-dd')
+    this.$router.replace(`/date/${formattedDate}`)
+  }
 
+  async updateDate(newDate: Date, changeReason: DateUpdateReason) {
     if (changeReason === 'manually-changed') {
       const formattedDate = DateFns.format(newDate, 'yyyy-MM-dd')
       this.$router.push(`/date/${formattedDate}`)
+      // the route is watched and when it changes this function is called again.
+      return
     }
 
-    if (changeReason === 'first-run') {
-      this.maxDate = newDate
-    }
-
+    this.date = newDate
     this.articles = {
       status: 'loading',
     }
@@ -117,11 +137,7 @@ export default class ArticlePage extends Vue {
         }
       }
     } catch (e) {
-      if (changeReason === 'first-run') {
-        await this.onDateSet(DateFns.subDays(newDate, 1), 'first-run')
-      } else {
-        this.articles = { status: 'error' }
-      }
+      this.articles = { status: 'error' }
     }
   }
 }

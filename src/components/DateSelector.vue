@@ -24,16 +24,22 @@ type Change = 'add' | 'subtract'
 @Component
 export default class DateSelector extends Vue {
   @Prop({ required: true })
-  public date!: Date
+  public date!: Date | null
 
   @Prop({ required: true })
   public maxDate!: Date
 
   get formattedDate() {
+    if (!this.date) {
+      return ''
+    }
     return DateFns.format(this.date, 'MMM do yyyy')
   }
 
   get isFutureDisabled() {
+    if (!this.date) {
+      return true
+    }
     return (
       DateFns.isAfter(this.date, this.maxDate) ||
       DateFns.isSameDay(this.date, this.maxDate)
@@ -52,6 +58,9 @@ export default class DateSelector extends Vue {
   }
 
   addUnit(unit: Unit) {
+    if (!this.date) {
+      return
+    }
     const addFunction = unit === 'day' ? DateFns.addDays : DateFns.addMonths
     const newDate = addFunction(this.date, 1)
     if (DateFns.isAfter(newDate, this.maxDate)) {
@@ -62,6 +71,9 @@ export default class DateSelector extends Vue {
   }
 
   subUnit(unit: Unit) {
+    if (!this.date) {
+      return
+    }
     switch (unit) {
       case 'day': {
         return DateFns.subDays(this.date, 1)

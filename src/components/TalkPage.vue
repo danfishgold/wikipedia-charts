@@ -96,6 +96,7 @@ before, like the abundance of gradients in Wikipedia's navigation bar, and also
 the fact that articles in Wikipedia, which are made specifically for long form
 reading, don't have a maximum width?! Dear reader, I did not repeat this weird
 choice and settled for an equally weird choice of a maximum width of 960 pixels.
+I also used a font size of 16px rather than 14px because I have human eyes.
 
 ### The little date picker thing
 

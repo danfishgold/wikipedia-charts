@@ -34,12 +34,14 @@
       it’s a new
       <a href="https://en.wikipedia.org/wiki/Netflix">Netflix</a> show.
     </p>
-    <date-selector
-      :date="date"
-      :max-date="maxDate"
-      @update="updateDate($event, 'manually-changed')"
-    ></date-selector>
-    <leaderboard :articles="articles" :date="date"></leaderboard>
+    <div class="date-selector-and-leaderboard">
+      <leaderboard :articles="articles" :date="date"></leaderboard>
+      <date-selector
+        v-if="date"
+        :date="date"
+        :max-date="maxDate"
+      ></date-selector>
+    </div>
     <div id="spacer"></div>
   </main>
 </template>
@@ -54,8 +56,6 @@ import * as wikipedia from '../wikipedia'
 import { Article } from '../wikipedia'
 import * as DateFns from 'date-fns'
 import { RemoteData } from '../remoteData'
-
-type DateUpdateReason = 'new-url' | 'manually-changed'
 
 @Component({
   components: {
@@ -79,7 +79,7 @@ export default class ArticlePage extends Vue {
       this.rerouteToMaxDate()
       return
     }
-    await this.updateDate(newDate, 'new-url')
+    await this.updateDate(newDate)
   }
 
   @Watch('$route')
@@ -89,7 +89,7 @@ export default class ArticlePage extends Vue {
       this.rerouteToMaxDate()
       return
     }
-    await this.updateDate(newDate, 'new-url')
+    await this.updateDate(newDate)
   }
 
   parseDateFromRoute(route: Route, maxDate: Date | null): Date | null {
@@ -113,14 +113,7 @@ export default class ArticlePage extends Vue {
     this.$router.replace(`/date/${formattedDate}`)
   }
 
-  async updateDate(newDate: Date, changeReason: DateUpdateReason) {
-    if (changeReason === 'manually-changed') {
-      const formattedDate = DateFns.format(newDate, 'yyyy-MM-dd')
-      this.$router.push(`/date/${formattedDate}`)
-      // the route is watched and when it changes this function is called again.
-      return
-    }
-
+  async updateDate(newDate: Date) {
     this.date = newDate
     this.articles = {
       status: 'loading',

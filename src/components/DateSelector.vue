@@ -1,87 +1,81 @@
 <template>
   <div class="date-selector">
-    <button @click="emitChange('subtract', 'month')">&lt;&lt;</button>
-    <button @click="emitChange('subtract', 'day')">&lt;</button>
-    <span>{{ formattedDate }}</span>
-    <button @click="emitChange('add', 'day')" :disabled="isFutureDisabled">
-      &gt;
-    </button>
-    <button @click="emitChange('add', 'month')" :disabled="isFutureDisabled">
-      &gt;&gt;
-    </button>
+    <span class="date-selector__current-date">{{ formattedDate }}</span>
+    <div class="date-selector__past--desktop">
+      ←
+      <date-link-or-text :date="previousMonth"
+        >Previous month</date-link-or-text
+      >
+      <span class="date-selector__separator">·</span>
+      <date-link-or-text :date="previousDay">Previous day</date-link-or-text>
+    </div>
+    <div class="date-selector__past--mobile">
+      <strong class="date-direction-label">← Past</strong>
+      <date-link-or-text :date="previousDay">Previous day</date-link-or-text>
+      <date-link-or-text :date="previousMonth"
+        >Previous month</date-link-or-text
+      >
+    </div>
+    <div class="date-selector__future--desktop">
+      <date-link-or-text :date="nextDay">Next day</date-link-or-text>
+      <span class="date-selector__separator">·</span>
+      <date-link-or-text :date="nextMonth">Next month</date-link-or-text>
+      →
+    </div>
+    <div class="date-selector__future--mobile">
+      <strong class="date-direction-label">Future →</strong>
+      <date-link-or-text :date="nextDay">Next day</date-link-or-text>
+      <date-link-or-text :date="nextMonth">Next month</date-link-or-text>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import DateLinkOrText from './DateLinkOrText.vue'
 
 import * as DateFns from 'date-fns'
-import startOfTomorrow from 'date-fns/startOfTomorrow'
 
 type Unit = 'day' | 'month'
 type Change = 'add' | 'subtract'
 
-@Component
+@Component({
+  components: { DateLinkOrText },
+})
 export default class DateSelector extends Vue {
   @Prop({ required: true })
-  public date!: Date | null
+  public date!: Date
 
   @Prop({ required: true })
   public maxDate!: Date
 
   get formattedDate() {
-    if (!this.date) {
-      return ''
-    }
     return DateFns.format(this.date, 'MMM do yyyy')
   }
 
   get isFutureDisabled() {
-    if (!this.date) {
-      return true
-    }
     return (
       DateFns.isAfter(this.date, this.maxDate) ||
       DateFns.isSameDay(this.date, this.maxDate)
     )
   }
 
-  emitChange(addOrSubtract: Change, unit: Unit) {
-    switch (addOrSubtract) {
-      case 'add': {
-        return this.$emit('update', this.addUnit(unit))
-      }
-      case 'subtract': {
-        return this.$emit('update', this.subUnit(unit))
-      }
-    }
+  get previousDay(): Date {
+    return DateFns.subDays(this.date, 1)
   }
 
-  addUnit(unit: Unit) {
-    if (!this.date) {
-      return
-    }
-    const addFunction = unit === 'day' ? DateFns.addDays : DateFns.addMonths
-    const newDate = addFunction(this.date, 1)
-    if (DateFns.isAfter(newDate, this.maxDate)) {
-      return this.maxDate
-    } else {
-      return newDate
-    }
+  get nextDay(): Date | null {
+    const date = DateFns.addDays(this.date, 1)
+    return DateFns.isAfter(date, this.maxDate) ? null : date
   }
 
-  subUnit(unit: Unit) {
-    if (!this.date) {
-      return
-    }
-    switch (unit) {
-      case 'day': {
-        return DateFns.subDays(this.date, 1)
-      }
-      case 'month': {
-        return DateFns.subMonths(this.date, 1)
-      }
-    }
+  get previousMonth(): Date {
+    return DateFns.subMonths(this.date, 1)
+  }
+
+  get nextMonth(): Date | null {
+    const date = DateFns.addMonths(this.date, 1)
+    return DateFns.isAfter(date, this.maxDate) ? null : date
   }
 }
 </script>

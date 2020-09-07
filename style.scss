@@ -77,8 +77,7 @@ table {
   color: #202122;
   font-size: 16px;
 
-  margin: 16px 0;
-  border: 1px solid #a2a9b1;
+  margin: 16px 0 0;
   border-collapse: collapse;
   width: 100%;
 
@@ -115,6 +114,12 @@ table {
       }
     }
 
+    &:last-child {
+      td {
+        border-bottom: none;
+      }
+    }
+
     &.up,
     &.big-up,
     &.huge-up {
@@ -135,17 +140,106 @@ table {
   }
 }
 
+.date-selector-and-leaderboard {
+  height: auto;
+}
+
 #leaderboard-container p {
   margin: 0.5rem;
 }
 
 .date-selector {
   position: sticky;
-  top: 0;
-  margin: 0 auto;
-  padding: 1rem;
-  background: white;
+  bottom: 0;
+  margin: 0 0;
+  padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  background: #eaecf0;
+  border: 1px solid #a2a9b1;
   font-variant-numeric: tabular-nums;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-auto-flow: dense;
+  align-items: baseline;
+
+  &__current-date {
+    text-align: center;
+    padding: 0 1rem;
+    font-weight: bold;
+
+    grid-column: 2;
+  }
+
+  &__past {
+    &--desktop {
+      grid-column: 1;
+      text-align: left;
+    }
+
+    &--mobile {
+      grid-column: 1;
+    }
+  }
+
+  &__future {
+    &--desktop {
+      grid-column: 3;
+      text-align: right;
+    }
+
+    &--mobile {
+      grid-column: 2;
+    }
+  }
+
+  &__past,
+  &__future {
+    &--mobile {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    grid-template-columns: 1fr 1fr;
+
+    &__current-date {
+      grid-column: 1 / -1;
+    }
+
+    &__past {
+      &--mobile {
+        .date-direction-label {
+          margin-left: -1.4rem;
+        }
+      }
+    }
+
+    &__future {
+      &--mobile {
+        .date-direction-label {
+          margin-right: -1.4rem;
+        }
+      }
+    }
+
+    &__past,
+    &__future {
+      &--desktop {
+        display: none;
+      }
+      &--mobile {
+        display: grid;
+        gap: 0.25rem;
+        text-align: center;
+        align-items: center;
+
+        a,
+        strong {
+          display: block;
+        }
+      }
+    }
+  }
 }
 
 nav {

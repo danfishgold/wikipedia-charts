@@ -110,7 +110,7 @@ export default class ArticlePage extends Vue {
 
   rerouteToMaxDate() {
     const formattedDate = DateFns.format(this.maxDate, 'yyyy-MM-dd')
-    this.$router.replace(`/date/${formattedDate}`)
+    this.$router.replace(`/${formattedDate}`)
   }
 
   async updateDate(newDate: Date) {

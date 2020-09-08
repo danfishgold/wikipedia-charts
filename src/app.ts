@@ -10,7 +10,7 @@ Vue.use(VueRouter)
 const routes = [
   { path: '/', component: ArticlePage },
   {
-    path: '/date/:date(\\d{4}-\\d{1,2}-\\d{1,2})',
+    path: '/:date(\\d{4}-\\d{1,2}-\\d{1,2})',
     name: 'exact-date',
     component: ArticlePage,
   },
@@ -18,7 +18,7 @@ const routes = [
   { path: '*', component: ArticlePage },
 ]
 
-const router = new VueRouter({ routes })
+const router = new VueRouter({ routes, mode: 'history' })
 
 new Vue({
   el: '#app',

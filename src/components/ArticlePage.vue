@@ -115,21 +115,25 @@ export default class ArticlePage extends Vue {
 
   async updateDate(newDate: Date) {
     this.date = newDate
-    this.articles = {
-      status: 'loading',
-    }
+    const setToLoading = setTimeout(() => {
+      this.articles = {
+        status: 'loading',
+      }
+    }, 75)
 
     try {
       const data = await wikipedia.getResultsForDate(newDate, this.cache)
       // to avoid race conditions where the date is changed before the request
       // for the previous date is resolved
       if (this.date === newDate) {
+        clearTimeout(setToLoading)
         this.articles = {
           data,
           status: 'okay',
         }
       }
     } catch (e) {
+      clearTimeout(setToLoading)
       this.articles = { status: 'error' }
     }
   }

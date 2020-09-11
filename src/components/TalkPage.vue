@@ -12,8 +12,8 @@ import VueMarkdown from 'vue-markdown'
 const source = `
 This page covers implementation details for this site. Links in this page will
 not point to Wikipedia articles, but rather to the actual sites of the things
-the links are about. Like a normal website that isn't mascarading as [Wikipedia]
-would do.
+the links are about. Like a normal website that isn't masquerading as
+[Wikipedia] would do.
 
 ## The Wikimedia API
 
@@ -22,7 +22,7 @@ is about Wikipedia (and other Wikimedia stuff) so there's a lot of cool data to
 work with! For this website I specifically used the ["Most viewed
 articles"][most-viewed] endpoint of the [Pageview API][pageview-api], which is
 pretty self explanatory. Information about a given day is only available after
-it's over, which is a little dissapointing because it could have been really
+it's over, which is a little disappointing because it could have been really
 cool to see trends in real time.
 
 ## Platform and Technologies
@@ -52,7 +52,7 @@ code, but it was a great experience for this ~small site. The only thing I had
 trouble with is using TypeScript in Vue. This paragraph is going to age well
 considering Vue 3.0 is right around the corner and one of its features is better
 TypeScript support but why not: it wasn't immediately obvious how to use
-TypeScript in Vue but after some diggin around I found out about
+TypeScript in Vue but after some digging around I found out about
 [\`vue-property-decorator\`][vue-property-decorator], which adds a bunch of
 convenience decorators that help TypeScript's type inference. Without it I would
 have had to write some very ugly code to get type inference. All in all it was
@@ -100,8 +100,8 @@ I also used a font size of 16px rather than 14px because I have human eyes.
 
 ### The little date picker thing
 
-Man was it hard to come with a design for it that didn't look foreign in a page
-meant to look like Wikipedia. I tried to find some reference material for
+Man, was it hard to come up with a design for it that didn't look foreign in a
+page meant to look like Wikipedia. I tried to find some reference material for
 interactive elements on Wikipedia, which is hard because it's Wikipedia. The
 closest thing I had in mind were the little arrows to the previous/next episodes
 in Wikipedia articles for episodes of TV shows. Here's [an
@@ -109,7 +109,7 @@ example][steven-universe-episode] (spoilers for Steven Universe S01E20).
 
 I made it stick to the bottom of the screen because I think that would be more
 comfortable for mobile users. However, I am afraid that people wouldn't notice
-it's there. This fear is warrented because after I made it stick to the bottom
+it's there. This fear is warranted because after I made it stick to the bottom
 of the window I kept scrolling all the way to the end of the table before
 realizing what I was doing.
 

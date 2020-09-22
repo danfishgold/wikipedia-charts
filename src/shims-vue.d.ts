@@ -3,3 +3,8 @@ declare module '*.vue' {
   const component: ReturnType<typeof defineComponent>
   export default component
 }
+
+declare module '*.md' {
+  const content: string
+  export default content
+}

@@ -33,19 +33,22 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-
 import LeaderboardRow from './LeaderboardRow.vue'
 import ErrorMessage from './ErrorMessage.vue'
 import { Article } from '../wikipedia'
 import { RemoteData } from '../remoteData'
+import { defineComponent, PropType } from 'vue'
 
-@Component({ components: { LeaderboardRow, ErrorMessage } })
-export default class Leaderboard extends Vue {
-  @Prop({ required: true })
-  public articles!: RemoteData<Array<Article>>
-
-  @Prop({ required: true })
-  public date!: Date
-}
+export default defineComponent({
+  components: {
+    LeaderboardRow,
+    ErrorMessage,
+  },
+  props: {
+    articles: {
+      type: Object as PropType<RemoteData<Article[]>>,
+      required: true,
+    },
+  },
+})
 </script>

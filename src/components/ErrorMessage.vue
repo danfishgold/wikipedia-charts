@@ -18,30 +18,35 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
 import * as DateFns from 'date-fns'
-import startOfYesterday from 'date-fns/startOfYesterday'
+import { computed, ComputedRef, defineComponent, PropType } from 'vue'
 
 type ErrorType =
   | 'no-information-for-today'
   | 'no-information-before-2015'
   | 'general-problem'
 
-@Component
-export default class extends Vue {
-  @Prop({ required: true })
-  date!: Date
+export default defineComponent({
+  props: {
+    date: {
+      type: Object as PropType<Date>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const errorType: ComputedRef<ErrorType> = computed(() => {
+      if (DateFns.isAfter(props.date, DateFns.startOfYesterday())) {
+        return 'no-information-for-today'
+      } else if (
+        DateFns.isBefore(props.date, DateFns.startOfDay(new Date('2015-07-02')))
+      ) {
+        return 'no-information-before-2015'
+      } else {
+        return 'general-problem'
+      }
+    })
 
-  get errorType(): ErrorType {
-    if (DateFns.isAfter(this.date, startOfYesterday())) {
-      return 'no-information-for-today'
-    } else if (
-      DateFns.isBefore(this.date, DateFns.startOfDay(new Date('2015-07-02')))
-    ) {
-      return 'no-information-before-2015'
-    } else {
-      return 'general-problem'
-    }
-  }
-}
+    return { errorType }
+  },
+})
 </script>

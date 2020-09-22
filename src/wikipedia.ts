@@ -15,7 +15,7 @@ interface ApiArticle {
 
 export async function getResultsForDate(
   date: Date,
-  cache: Cache | null,
+  cache: Cache | null
 ): Promise<Array<Article>> {
   const [atDate, atDayBefore] = await Promise.all([
     getTopPagesForDate(date, cache),
@@ -46,7 +46,7 @@ export async function maxDate(cache: Cache | null): Promise<Date> {
   const twoDaysAgo = DateFns.subDays(yesterday, 1)
 
   const [tomorrowOkay, todayOkay, yesterdayOkay] = await Promise.all(
-    [tomorrow, today, yesterday].map((date) => loadsFine(date, cache)),
+    [tomorrow, today, yesterday].map((date) => loadsFine(date, cache))
   )
 
   if (tomorrowOkay) {
@@ -64,7 +64,7 @@ export async function maxDate(cache: Cache | null): Promise<Date> {
   }
 }
 
-async function loadsFine(date, cache: Cache | null): Promise<boolean> {
+async function loadsFine(date: Date, cache: Cache | null): Promise<boolean> {
   try {
     await topPagesResponseForDate(date, cache)
     return true
@@ -75,7 +75,7 @@ async function loadsFine(date, cache: Cache | null): Promise<boolean> {
 
 async function getTopPagesForDate(
   date: Date,
-  cache: Cache | null,
+  cache: Cache | null
 ): Promise<Array<ApiArticle>> {
   const response = await topPagesResponseForDate(date, cache)
   const asJson = await response.json()
@@ -85,7 +85,7 @@ async function getTopPagesForDate(
 
 async function topPagesResponseForDate(
   date: Date,
-  cache: Cache | null,
+  cache: Cache | null
 ): Promise<Response> {
   const dateString = DateFns.format(date, 'yyyy/MM/dd')
   const url = `https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/${dateString}`

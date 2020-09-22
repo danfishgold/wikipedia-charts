@@ -2,12 +2,13 @@
   <main>
     <h1>Talk:Wikipedia Charts</h1>
     <p class="subtitle">Not from Wikipedia, the free encyclopedia</p>
-    <vue-markdown :source="source" :breaks="false"></vue-markdown>
+    <!-- <vue-markdown :source="source" :breaks="false"></vue-markdown> -->
   </main>
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown'
+import { defineComponent } from 'vue'
+// import VueMarkdown from 'vue-markdown'
 
 const source = `
 This page covers implementation details for this site. Links in this page will
@@ -131,10 +132,10 @@ realizing what I was doing.
 [steven-universe-episode]: https://en.wikipedia.org/wiki/Coach_Steven
 `
 
-export default {
-  data() {
+export default defineComponent({
+  // components: { VueMarkdown },
+  setup() {
     return { source }
   },
-  components: { VueMarkdown },
-}
+})
 </script>

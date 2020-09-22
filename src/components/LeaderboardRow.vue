@@ -13,60 +13,73 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { computed, ComputedRef, defineComponent, PropType } from 'vue'
 import { Article } from '../wikipedia'
 
-@Component
-export default class LeaderboardRow extends Vue {
-  @Prop({ required: true })
-  public article!: Article
+type RankChange = 'same' | 'up' | 'down' | 'big-up' | 'huge-up'
 
-  get normalizedTitle() {
-    return this.article.title === 'Special:Search'
-      ? 'Search'
-      : this.article.title.replace(/_/g, ' ') ?? ''
-  }
+export default defineComponent({
+  props: {
+    article: {
+      type: Object as PropType<Article>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const normalizedTitle: ComputedRef<string> = computed(() => {
+      return props.article.title === 'Special:Search'
+        ? 'Search'
+        : props.article.title.replace(/_/g, ' ') ?? ''
+    })
 
-  get changeFromYesterday(): number | null {
-    if (!this.article.rankOnPreviousDay) {
-      return null
-    }
-    return this.article.rank - this.article.rankOnPreviousDay
-  }
+    const changeFromYesterday: ComputedRef<number | null> = computed(() => {
+      if (!props.article.rankOnPreviousDay) {
+        return null
+      }
+      return props.article.rank - props.article.rankOnPreviousDay
+    })
 
-  get rowClass(): 'same' | 'up' | 'down' | 'big-up' | 'huge-up' {
-    if (this.changeFromYesterday === null) {
-      return 'huge-up'
-    }
-    if (this.changeFromYesterday > 0) {
-      return `down`
-    } else if (this.changeFromYesterday < -100) {
-      return `big-up`
-    } else if (this.changeFromYesterday < 0) {
-      return `up`
-    } else {
-      return 'same'
-    }
-  }
+    const rowClass: ComputedRef<RankChange> = computed(() => {
+      if (changeFromYesterday.value === null) {
+        return 'huge-up'
+      }
+      if (changeFromYesterday.value > 0) {
+        return `down`
+      } else if (changeFromYesterday.value < -100) {
+        return `big-up`
+      } else if (changeFromYesterday.value < 0) {
+        return `up`
+      } else {
+        return 'same'
+      }
+    })
 
-  get changeIndicator(): string {
-    switch (this.rowClass) {
-      case 'huge-up': {
-        return '⬆︎⬆︎⬆︎'
+    const changeIndicator: ComputedRef<string> = computed(() => {
+      switch (rowClass.value) {
+        case 'huge-up': {
+          return '⬆︎⬆︎⬆︎'
+        }
+        case 'big-up': {
+          return `⬆︎${-(changeFromYesterday.value ?? 0)}`
+        }
+        case 'up': {
+          return `⬆︎${-(changeFromYesterday.value ?? 0)}`
+        }
+        case 'down': {
+          return `⬇︎${changeFromYesterday.value ?? 0}`
+        }
+        case 'same': {
+          return '–'
+        }
       }
-      case 'big-up': {
-        return `⬆︎${-this.changeFromYesterday ?? 0}`
-      }
-      case 'up': {
-        return `⬆︎${-this.changeFromYesterday ?? 0}`
-      }
-      case 'down': {
-        return `⬇︎${this.changeFromYesterday ?? 0}`
-      }
-      case 'same': {
-        return '–'
-      }
+    })
+
+    return {
+      normalizedTitle,
+      changeFromYesterday,
+      rowClass,
+      changeIndicator,
     }
-  }
-}
+  },
+})
 </script>

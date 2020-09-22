@@ -9,15 +9,18 @@
 
 <script lang="ts">
 import * as DateFns from 'date-fns'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { computed, ComputedRef, defineComponent, PropType } from 'vue'
 
-@Component
-export default class DateLinkOrText extends Vue {
-  @Prop({ required: true })
-  date!: Date | null
+export default defineComponent({
+  props: {
+    date: Object as PropType<Date>,
+  },
+  setup(props) {
+    const formattedDate: ComputedRef<string> = computed(() => {
+      return DateFns.format(props.date!, 'yyyy-MM-dd')
+    })
 
-  get formattedDate(): string {
-    return DateFns.format(this.date!, 'yyyy-MM-dd')
-  }
-}
+    return { formattedDate }
+  },
+})
 </script>

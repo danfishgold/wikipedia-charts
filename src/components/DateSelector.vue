@@ -31,51 +31,65 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
 import DateLinkOrText from './DateLinkOrText.vue'
-
 import * as DateFns from 'date-fns'
+import { computed, ComputedRef, defineComponent, PropType } from 'vue'
 
 type Unit = 'day' | 'month'
 type Change = 'add' | 'subtract'
 
-@Component({
-  components: { DateLinkOrText },
+export default defineComponent({
+  components: {
+    DateLinkOrText,
+  },
+  props: {
+    date: {
+      type: Object as PropType<Date>,
+      required: true,
+    },
+    maxDate: {
+      type: Object as PropType<Date>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const formattedDate: ComputedRef<string> = computed(() => {
+      return DateFns.format(props.date, 'MMM do yyyy')
+    })
+
+    const isFutureDisabled: ComputedRef<boolean> = computed(() => {
+      return (
+        DateFns.isAfter(props.date, props.maxDate) ||
+        DateFns.isSameDay(props.date, props.maxDate)
+      )
+    })
+
+    const previousDay: ComputedRef<Date> = computed(() => {
+      return DateFns.subDays(props.date, 1)
+    })
+
+    const nextDay: ComputedRef<Date | null> = computed(() => {
+      const date = DateFns.addDays(props.date, 1)
+      return DateFns.isAfter(date, props.maxDate) ? null : date
+    })
+
+    const previousMonth: ComputedRef<Date> = computed(() => {
+      return DateFns.subMonths(props.date, 1)
+    })
+
+    const nextMonth: ComputedRef<Date | null> = computed(() => {
+      const date = DateFns.addMonths(props.date, 1)
+      return DateFns.isAfter(date, props.maxDate) ? null : date
+    })
+
+    return {
+      formattedDate,
+      isFutureDisabled,
+      previousDay,
+      nextDay,
+      previousMonth,
+      nextMonth,
+    }
+  },
 })
-export default class DateSelector extends Vue {
-  @Prop({ required: true })
-  public date!: Date
-
-  @Prop({ required: true })
-  public maxDate!: Date
-
-  get formattedDate() {
-    return DateFns.format(this.date, 'MMM do yyyy')
-  }
-
-  get isFutureDisabled() {
-    return (
-      DateFns.isAfter(this.date, this.maxDate) ||
-      DateFns.isSameDay(this.date, this.maxDate)
-    )
-  }
-
-  get previousDay(): Date {
-    return DateFns.subDays(this.date, 1)
-  }
-
-  get nextDay(): Date | null {
-    const date = DateFns.addDays(this.date, 1)
-    return DateFns.isAfter(date, this.maxDate) ? null : date
-  }
-
-  get previousMonth(): Date {
-    return DateFns.subMonths(this.date, 1)
-  }
-
-  get nextMonth(): Date | null {
-    const date = DateFns.addMonths(this.date, 1)
-    return DateFns.isAfter(date, this.maxDate) ? null : date
-  }
-}
 </script>

@@ -17,36 +17,37 @@ cool to see trends in real time.
 
 ## Platform and Technologies
 
-I made this site using [Vue.js], [TypeScript], and [Sass]. It's built using
-[Parcel] and deployed on [Netlify].
+I made this site using [Vue.js], [TypeScript], and [Sass]. It's deployed on
+[Netlify].
 
-### Sass, Parcel, and Netlify
+### Sass and Netlify
 
-I'm grouping these three together because I basically only have good things to
-say about them: [Sass] is wonderful and provides great improvements over plain
-CSS that make the code a lot cleaner. [Netlify] is also delightful to use. I
-just needed to add a `netlify.toml` file with three lines of configuration and
-the site was ready to deploy. And [Parcel] makes setting up front end projects
-so much nicer! I don't have to dig around [Webpack]'s and [Babel]'s
-documentation just to make a simple tiny standard site. I think Parcel has the
-opposite problem to Webpack: Webpack makes it very complicated to create simple
-setups, and Parcel _really_ likes to hide customization options. Luckily this is
-not something I had trouble with. This time.
+I'm grouping these two together because I basically only have good things to say
+about them: [Sass] is wonderful and provides great improvements over plain CSS
+that make the code a lot cleaner. [Netlify] is also delightful to use. I just
+needed to add a `netlify.toml` file with three lines of configuration and the
+site was ready to deploy.
 
-### Vue.js, TypeScript, and Parcel
+### Vue.js and TypeScript
 
 For some reason I didn't make this site in [Elm]. That reason is that I wanted
 to play around with Vue. This is my third project using Vue and I still like it
 a lot! I have no idea how it's like in a big project with a bunch of shared
 code, but it was a great experience for this ~small site. The only thing I had
-trouble with is using TypeScript in Vue. This paragraph is going to age well
-considering Vue 3.0 is right around the corner and one of its features is better
-TypeScript support but why not: it wasn't immediately obvious how to use
-TypeScript in Vue but after some digging around I found out about
-[\`vue-property-decorator\`][vue-property-decorator], which adds a bunch of
-convenience decorators that help TypeScript's type inference. Without it I would
-have had to write some very ugly code to get type inference. All in all it was
-okay, but there was a lot of friction. Hopefully Vue 3 will change that.
+trouble with was integrating it with TypeScript, _however_, after I initially
+wrote this project using Vue 2, I rewrote it with Vue 3's new composition API
+and it was really nice! It did a lot of type inference and the only weird thing
+I had to do was use `PropType` for my non-string props (a good example of that
+is the props for `/src/components/Leaderboard.vue`).
+
+### Not Parcel
+
+[Parcel] is so neat! But Parcel is also in a weird stage right now where v1,
+which is currently out, is in maintenance mode while they're working on v2,
+which is far(?) from ready. This means it would take a while until Vue 3 is
+supported. This is usually fine but I wanted to try out Vue 3 basically two days
+after it came out??? In any case, I figured I might as well try Vue's CLI and
+use that to bundle this project instead and it worked out okay in the end!
 
 ### Not Glitch
 
@@ -59,7 +60,9 @@ rebuild. There is a paid program where this is not the case). Recently Glitch
 announced that static sites would not need this loading screen, but even though
 this site _is_ static, Glitch would not see it that way because it has a build
 process. Compared to Glitch, Netlify's free plan is very generous, has much
-better support for custom domains, and has a very simple deployment process.
+better support for custom domains, and has a very simple deployment process,
+specifically for sites like this one, which are static but require a build
+phase.
 
 ## Design
 
@@ -105,7 +108,8 @@ realizing what I was doing.
 
 [wikipedia]: https://en.wikipedia.org/wiki/Wikipedia
 [wikimedia-api]: https://www.mediawiki.org/wiki/API:Main_page
-[most-viewed]: https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews#Most_viewed_articles
+[most-viewed]:
+  https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews#Most_viewed_articles
 [pageview-api]: https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews
 [parcel]: https://parceljs.org
 [typescript]: https://www.typescriptlang.org

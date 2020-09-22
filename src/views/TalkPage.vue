@@ -14,7 +14,10 @@ import source from '@/assets/talk.md'
 
 export default defineComponent({
   setup() {
-    const md = new MarkdownIt({ html: true })
+    const md = new MarkdownIt({
+      html: true,
+      typographer: true,
+    })
     const content = md.render(source)
     return { content }
   },

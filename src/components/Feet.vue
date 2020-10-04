@@ -1,7 +1,7 @@
 <template>
   <footer>
     <div class="footer__content">
-      <p>This website was last edited on September 23rd, 2020.</p>
+      <p>This website was last edited on October 4th, 2020.</p>
       <p>
         If this were a real website with more than one and a half pages it would
         probably have enough content to put in this footer, but alas, that is

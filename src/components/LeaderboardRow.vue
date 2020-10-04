@@ -3,9 +3,7 @@
     <td>{{ new Intl.NumberFormat().format(article.rank) }}</td>
     <td>{{ changeIndicator }}</td>
     <td v-if="article.title">
-      <a :href="`https://en.wikipedia.com/wiki/${article.title}`">{{
-        this.normalizedTitle
-      }}</a>
+      <a :href="link">{{ normalizedTitle }}</a>
     </td>
     <td v-else></td>
     <td>{{ new Intl.NumberFormat().format(article.views) }}</td>
@@ -30,6 +28,10 @@ export default defineComponent({
       return props.article.title === 'Special:Search'
         ? 'Search'
         : props.article.title.replace(/_/g, ' ') ?? ''
+    })
+
+    const link: ComputedRef<string> = computed(() => {
+      return `https://en.wikipedia.com/wiki/${props.article.title}`
     })
 
     const changeFromYesterday: ComputedRef<number | null> = computed(() => {
@@ -76,6 +78,7 @@ export default defineComponent({
 
     return {
       normalizedTitle,
+      link,
       changeFromYesterday,
       rowClass,
       changeIndicator,

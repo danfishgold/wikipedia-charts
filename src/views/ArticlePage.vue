@@ -34,8 +34,12 @@
       it’s a new
       <a href="https://en.wikipedia.org/wiki/Netflix">Netflix</a> show.
     </p>
+    <error-message
+      v-if="articles.status === 'error'"
+      :date="date"
+    ></error-message>
     <div class="date-selector-and-leaderboard">
-      <leaderboard :articles="articles" :date="date"></leaderboard>
+      <leaderboard :articles="articles"></leaderboard>
       <date-selector
         v-if="date"
         :date="date"
@@ -50,6 +54,7 @@
 import { RouteLocationNormalized, useRoute, useRouter } from 'vue-router'
 
 import DateSelector from '@/components/DateSelector.vue'
+import ErrorMessage from '@/components/ErrorMessage.vue'
 import Leaderboard from '@/components/Leaderboard.vue'
 import * as wikipedia from '@/wikipedia'
 import { Article } from '@/wikipedia'
@@ -60,6 +65,7 @@ import { defineComponent, onMounted, ref, Ref, watch } from 'vue'
 export default defineComponent({
   components: {
     DateSelector,
+    ErrorMessage,
     Leaderboard,
   },
   setup() {

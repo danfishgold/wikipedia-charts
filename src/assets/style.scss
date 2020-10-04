@@ -140,6 +140,14 @@ table {
   }
 }
 
+.error-message {
+  background: rgb(255, 231, 206);
+  border: 1px solid rgb(162, 169, 177);
+  margin: 1rem 2rem;
+  padding: 0.2rem 1rem;
+  text-align: center;
+}
+
 .date-selector-and-leaderboard {
   height: auto;
 }

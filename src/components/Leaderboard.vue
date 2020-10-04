@@ -1,10 +1,6 @@
 <template>
   <div id="leaderboard-container">
-    <error-message
-      v-if="articles.status === 'error'"
-      :date="date"
-    ></error-message>
-    <table v-else>
+    <table v-if="articles.status !== 'error'">
       <thead>
         <tr>
           <th>Rank</th>
@@ -34,7 +30,6 @@
 
 <script lang="ts">
 import LeaderboardRow from './LeaderboardRow.vue'
-import ErrorMessage from './ErrorMessage.vue'
 import { Article } from '../wikipedia'
 import { RemoteData } from '../remoteData'
 import { defineComponent, PropType } from 'vue'
@@ -42,7 +37,6 @@ import { defineComponent, PropType } from 'vue'
 export default defineComponent({
   components: {
     LeaderboardRow,
-    ErrorMessage,
   },
   props: {
     articles: {

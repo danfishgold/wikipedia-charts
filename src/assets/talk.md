@@ -12,8 +12,11 @@ is about Wikipedia (and other Wikimedia stuff) so there's a lot of cool data to
 work with! For this website I specifically used the ["Most viewed
 articles"][most-viewed] endpoint of the [Pageview API][pageview-api], which is
 pretty self explanatory. Information about a given day is only available after
-it's over, which is a little disappointing because it could have been really
-cool to see trends in real time.
+it's over, which is a little disappointing because this could have been a really
+cool tool to see news trends in real time.
+
+If you know how to access today's most visited pages on Wikipedia, please [DM
+me][twitter]!
 
 ## Platform and Technologies
 
@@ -24,9 +27,9 @@ I made this site using [Vue.js], [TypeScript], and [Sass]. It's deployed on
 
 I'm grouping these two together because I basically only have good things to say
 about them: [Sass] is wonderful and provides great improvements over plain CSS
-that make the code a lot cleaner. [Netlify] is also delightful to use. I just
-needed to add a `netlify.toml` file with three lines of configuration and the
-site was ready to deploy.
+that make the code a lot cleaner. [Netlify] is also delightful to use. All I had
+to do in order to deploy this site was add a [`netlify.toml`][netlify.toml] file
+with ~7 lines of configuration and that's it!
 
 ### Vue.js and TypeScript
 
@@ -37,17 +40,17 @@ code, but it was a great experience for this ~small site. The only thing I had
 trouble with was integrating it with TypeScript, _however_, after I initially
 wrote this project using Vue 2, I rewrote it with Vue 3's new composition API
 and it was really nice! It did a lot of type inference and the only weird thing
-I had to do was use `PropType` for my non-string props (a good example of that
-is the props for `/src/components/Leaderboard.vue`).
+I had to do was use `PropType` for my non-string props (the props for
+[`src/components/Leaderboard.vue`][leaderboard.vue] are a good example of this).
 
 ### Not Parcel
 
-[Parcel] is so neat! But Parcel is also in a weird stage right now where v1,
-which is currently out, is in maintenance mode while they're working on v2,
-which is far(?) from ready. This means it would take a while until Vue 3 is
-supported. This is usually fine but I wanted to try out Vue 3 basically two days
-after it came out??? In any case, I figured I might as well try Vue's CLI and
-use that to bundle this project instead and it worked out okay in the end!
+[Parcel] is so neat! But it's also in a weird stage right now where v1, which is
+currently out, is in maintenance mode while they're working on v2, which is
+far(?) from ready. This means it would take a while until Vue 3 is supported.
+This is usually fine but I wanted to try out Vue 3 basically two days after it
+came out??? In any case, I figured I might as well try Vue's CLI and use that to
+bundle this project instead and it worked out okay in the end!
 
 ### Not Glitch
 
@@ -93,15 +96,15 @@ I also used a font size of 16px rather than 14px because I have human eyes.
 
 ### The little date picker thing
 
-Man, was it hard to come up with a design for it that didn't look foreign in a
-page meant to look like Wikipedia. I tried to find some reference material for
-interactive elements on Wikipedia, which is hard because it's Wikipedia. The
+Wow, was it hard to come up with a design for it that didn't look out of place
+in a page meant to look like Wikipedia. I tried to find some reference material
+for interactive elements on Wikipedia, which is hard because it's Wikipedia. The
 closest thing I had in mind were the little arrows to the previous/next episodes
 in Wikipedia articles for episodes of TV shows. Here's [an
 example][steven-universe-episode] (spoilers for Steven Universe S01E20).
 
 I made it stick to the bottom of the screen because I think that would be more
-comfortable for mobile users. However, I am afraid that people wouldn't notice
+comfortable on mobile devices. However, I am afraid that people wouldn't notice
 it's there. This fear is warranted because after I made it stick to the bottom
 of the window I kept scrolling all the way to the end of the table before
 realizing what I was doing.
@@ -122,3 +125,8 @@ realizing what I was doing.
 [babel]: https://babeljs.io
 [vue-property-decorator]: https://github.com/kaorun343/vue-property-decorator
 [steven-universe-episode]: https://en.wikipedia.org/wiki/Coach_Steven
+[twitter]: https://twitter.com/danfishgold
+[netlify.toml]:
+  https://github.com/danfishgold/wikipedia-charts/blob/main/netlify.toml
+[leaderboard.vue]:
+  https://github.com/danfishgold/wikipedia-charts/blob/d4fe3f00ffbf7d419f27b428d4faae5740ed6bbe/src/components/Leaderboard.vue

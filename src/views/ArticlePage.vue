@@ -39,12 +39,12 @@
       :date="date"
     ></error-message>
     <div class="date-selector-and-leaderboard">
-      <leaderboard :articles="articles"></leaderboard>
       <date-selector
         v-if="date"
         :date="date"
         :max-date="maxDate"
       ></date-selector>
+      <leaderboard :articles="articles"></leaderboard>
     </div>
     <div id="spacer"></div>
   </main>

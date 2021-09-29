@@ -153,6 +153,7 @@ table {
 
 .date-selector-and-leaderboard {
   height: auto;
+  display: grid;
 }
 
 #leaderboard-container p {
@@ -160,6 +161,7 @@ table {
 }
 
 .date-selector {
+  grid-row: 2;
   position: sticky;
   bottom: 0;
   margin: 0 0;

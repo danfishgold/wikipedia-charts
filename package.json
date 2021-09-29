@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "watch": "vue-cli-service serve",
+    "dev": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },
   "dependencies": {
